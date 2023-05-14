@@ -1,10 +1,21 @@
-canvas {
-  border: 1px solid ;
+body {
+  background-color: rgb(22, 22, 26);
+}
+
+
+#meuQuadrado {
+  border: 1px solid green;
   display: block;
   margin: auto;
+  width: 70vh;
+  height: 70vh;
 }
       
 button {
   display: block;
   margin: auto;
+  width: 10em;
+  height: 2em;
+  background-color: white;
+  color: black;
 }
