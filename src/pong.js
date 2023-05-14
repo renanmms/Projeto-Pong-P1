@@ -1,23 +1,14 @@
-//Eu //Eu quero fazer um retângulo se movimentar na tela quando eu apertar as teclas do teclado.
-//retangulo que se movimenta quando eu aperto as teclas do teclado
-/*
-retangulo()
-retangulo.direçãoX() //retangulo se movimenta right and left
-retangulo.direçãoX().onkeypress()
-*/
 var quadradoPrincipal = document.getElementById("meuQuadrado");
 var square = quadradoPrincipal.getContext("2d");
 
-//Objeto retangulo
-var objRet = {
+var retangulo = {
   x: 130,
   y: 270,
   largura: 70,
   altura: 10
 }
 
-//bolinha
-var objCir = {
+var bola = {
   x: 150,
   y: 150,
   raio: 8,
@@ -27,7 +18,7 @@ var objCir = {
   
 }
 
-var objObstaculo = {
+var obstaculo = {
   x: 16,
   y: 10,
   largura: 27,
@@ -40,77 +31,83 @@ function desenhar()
   //beginPath() - begins a path
   /*arc(x,y,r,startangle,endangle) - creates an arc/curve. To create a circle with arc(): Set start angle to 0 and end angle to 2*Math.PI. The x and y parameters define the x- and y-coordinates of the center of the circle. The r parameter defines the radius of the circle.*/
 
-  //Desenha o canvas
-  square.fillStyle = "black";
-  square.fillRect(0, 0, quadradoPrincipal.width, quadradoPrincipal.height);
+  desenharCanvas();
   
-  //Desenha a bola
-  square.beginPath();
-  square.arc(objCir.x, objCir.y, objCir.raio, 0, Math.PI * 2);
-  square.fillStyle = "red";
-  square.fill();
-  square.stroke();
+  desenharBola();
   
   //Desenha a raquete
   square.fillStyle = "white";
-  square.fillRect(objRet.x, objRet.y, objRet.largura, objRet.altura);
+  square.fillRect(retangulo.x, retangulo.y, retangulo.largura, retangulo.altura);
 
   //Desenha os obstaculos
-  for(var i = 0; i < quadradoPrincipal.width - (objObstaculo.largura + 3); i += objObstaculo.largura + 3)
+  for(var i = 0; i < quadradoPrincipal.width - (obstaculo.largura + 3); i += obstaculo.largura + 3)
   {
-    for(var j = 0; j < quadradoPrincipal.height/3; j += objObstaculo.altura + 4)
+    for(var j = 0; j < quadradoPrincipal.height/3; j += obstaculo.altura + 4)
     {
       square.fillStyle = "blue";
-      square.fillRect(objObstaculo.x + i, objObstaculo.y + j, objObstaculo.largura, objObstaculo.altura);
+      square.fillRect(obstaculo.x + i, obstaculo.y + j, obstaculo.largura, obstaculo.altura);
     }
   }
   
   //Colisão da bolinha com o canvas
-  if(objCir.x <= 10)
+  if(bola.x <= 10)
   {
-    objCir.senX = 1;
+    bola.senX = 1;
   }
-  else if (objCir.y <= 10)
+  else if (bola.y <= 10)
   {
-    objCir.senY = 1;
+    bola.senY = 1;
   }
   
-  if(objCir.y + objCir.raio >= 300)
+  if(bola.y + bola.raio >= 300)
   {
-    objCir.senY = -1;
+    bola.senY = -1;
   }
-  else if (objCir.x + objCir.raio >= 300)
+  else if (bola.x + bola.raio >= 300)
   {
-    objCir.senX = -1;
+    bola.senX = -1;
   }
 
   //Colisão da bolinha com a raquete
-  if((objCir.x  >= objRet.x && objCir.x <= objRet.x + objRet.largura) && objCir.y >= objRet.y)
+  if((bola.x  >= retangulo.x && bola.x <= retangulo.x + retangulo.largura) && bola.y >= retangulo.y)
   {
     
-    //console.log("Bolinha\nX = " + objCir.x + "\nY = " + objCir.y + "\nRaquete\nX = " + objRet.x + "\nY = " + objRet.y);
-    if(objCir.x >= objRet.x && objCir.x <= (objRet.x + objRet.largura)/2)
+    //console.log("Bolinha\nX = " + bola.x + "\nY = " + bola.y + "\nRaquete\nX = " + retangulo.x + "\nY = " + retangulo.y);
+    if(bola.x >= retangulo.x && bola.x <= (retangulo.x + retangulo.largura)/2)
     {    
-      objCir.senX = -1;
+      bola.senX = -1;
     }
 
-    objCir.senY = -1;
-    objCir.veloc += 0.2;
+    bola.senY = -1;
+    bola.veloc += 0.2;
   }
   
   //Colisão da raquete com a parede
-  if(objRet.x >= quadradoPrincipal.width - objRet.largura)
+  if(retangulo.x >= quadradoPrincipal.width - retangulo.largura)
   {
-    objRet.x = quadradoPrincipal.width - objRet.largura;
+    retangulo.x = quadradoPrincipal.width - retangulo.largura;
   }
-  else if(objRet.x <= 0)
+  else if(retangulo.x <= 0)
   {
-    objRet.x = 0;
+    retangulo.x = 0;
   }
   
   
-  objCir.x += objCir.veloc * objCir.senX;
-  objCir.y += objCir.veloc * objCir.senY;
+  bola.x += bola.veloc * bola.senX;
+  bola.y += bola.veloc * bola.senY;
+}
+
+function desenharCanvas() {
+  square.fillStyle = "black";
+  square.fillRect(0, 0, quadradoPrincipal.width, quadradoPrincipal.height);
+}
+
+function desenharBola() {
+  square.beginPath();
+  square.arc(bola.x, bola.y, bola.raio, 0, Math.PI * 2);
+  square.fillStyle = "red";
+  square.fill();
+  square.stroke();
 }
 
 //Começa o jogo
@@ -128,12 +125,12 @@ function move(evento)
   var key = evento.keyCode;
   if (key == 39)
   {
-    objRet.x += 20
+    retangulo.x += 20
   }
 
   else if (key == 37)
   {
-    objRet.x -= 20
+    retangulo.x -= 20
   }
 
   render();
