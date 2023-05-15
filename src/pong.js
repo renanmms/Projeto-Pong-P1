@@ -28,18 +28,36 @@ var obstaculo = {
 //Função que desenha cada frame
 function desenhar()
 {
-  //beginPath() - begins a path
-  /*arc(x,y,r,startangle,endangle) - creates an arc/curve. To create a circle with arc(): Set start angle to 0 and end angle to 2*Math.PI. The x and y parameters define the x- and y-coordinates of the center of the circle. The r parameter defines the radius of the circle.*/
-
   desenharCanvas();
-  
   desenharBola();
+  desenharRaquete();
+  desenharObstaculos();
   
-  //Desenha a raquete
+  colisao()
+  
+  bola.x += bola.veloc * bola.senX;
+  bola.y += bola.veloc * bola.senY;
+}
+
+function desenharCanvas() {
+  square.fillStyle = "black";
+  square.fillRect(0, 0, quadradoPrincipal.width, quadradoPrincipal.height);
+}
+
+function desenharBola() {
+  square.beginPath();
+  square.arc(bola.x, bola.y, bola.raio, 0, Math.PI * 2);
+  square.fillStyle = "red";
+  square.fill();
+  square.stroke();
+}
+
+function desenharRaquete() {
   square.fillStyle = "white";
   square.fillRect(retangulo.x, retangulo.y, retangulo.largura, retangulo.altura);
+}
 
-  //Desenha os obstaculos
+function desenharObstaculos() {
   for(var i = 0; i < quadradoPrincipal.width - (obstaculo.largura + 3); i += obstaculo.largura + 3)
   {
     for(var j = 0; j < quadradoPrincipal.height/3; j += obstaculo.altura + 4)
@@ -48,8 +66,10 @@ function desenhar()
       square.fillRect(obstaculo.x + i, obstaculo.y + j, obstaculo.largura, obstaculo.altura);
     }
   }
-  
-  //Colisão da bolinha com o canvas
+}
+
+function colisao() {
+   //Colisão da bolinha com o canvas
   if(bola.x <= 10)
   {
     bola.senX = 1;
@@ -72,7 +92,7 @@ function desenhar()
   if((bola.x  >= retangulo.x && bola.x <= retangulo.x + retangulo.largura) && bola.y >= retangulo.y)
   {
     
-    //console.log("Bolinha\nX = " + bola.x + "\nY = " + bola.y + "\nRaquete\nX = " + retangulo.x + "\nY = " + retangulo.y);
+    console.log("Bolinha\nX = " + bola.x + "\nY = " + bola.y + "\nRaquete\nX = " + retangulo.x + "\nY = " + retangulo.y);
     if(bola.x >= retangulo.x && bola.x <= (retangulo.x + retangulo.largura)/2)
     {    
       bola.senX = -1;
@@ -91,33 +111,17 @@ function desenhar()
   {
     retangulo.x = 0;
   }
-  
-  
-  bola.x += bola.veloc * bola.senX;
-  bola.y += bola.veloc * bola.senY;
 }
 
-function desenharCanvas() {
-  square.fillStyle = "black";
-  square.fillRect(0, 0, quadradoPrincipal.width, quadradoPrincipal.height);
-}
-
-function desenharBola() {
-  square.beginPath();
-  square.arc(bola.x, bola.y, bola.raio, 0, Math.PI * 2);
-  square.fillStyle = "red";
-  square.fill();
-  square.stroke();
-}
-
-//Começa o jogo
 function comecarJogo() 
 {
   console.log("Entrou no jogo");
-  //Atualiza a cada 20 milisegundos
+  intervaloAtualizacao();
+}
+
+function intervaloAtualizacao() {
   setInterval(desenhar, 20);
 }
-  
   
 window.addEventListener("keydown",move )
 function move(evento)
@@ -137,7 +141,7 @@ function move(evento)
 }
 
 function render(){
-  //console.log("Entrou no render");
+  console.log("Entrou no render");
   square.clearRect(0, 0, square.heigh, square.width)
   square.fillRect(0, 0, square.height, square.width)
 }
