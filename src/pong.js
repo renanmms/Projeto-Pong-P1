@@ -35,8 +35,7 @@ function desenhar()
   
   colisao()
   
-  bola.x += bola.veloc * bola.senX;
-  bola.y += bola.veloc * bola.senY;
+  aceleracaoBola();
 }
 
 function desenharCanvas() {
@@ -69,6 +68,12 @@ function desenharObstaculos() {
 }
 
 function colisao() {
+  colisaoBola();
+  colisaoRaquete();
+  colisaoParede();
+}
+
+function colisaoBola() {
    //Colisão da bolinha com o canvas
   if(bola.x <= 10)
   {
@@ -87,11 +92,12 @@ function colisao() {
   {
     bola.senX = -1;
   }
+}
 
+function colisaoRaquete() {
   //Colisão da bolinha com a raquete
   if((bola.x  >= retangulo.x && bola.x <= retangulo.x + retangulo.largura) && bola.y >= retangulo.y)
   {
-    
     console.log("Bolinha\nX = " + bola.x + "\nY = " + bola.y + "\nRaquete\nX = " + retangulo.x + "\nY = " + retangulo.y);
     if(bola.x >= retangulo.x && bola.x <= (retangulo.x + retangulo.largura)/2)
     {    
@@ -101,7 +107,9 @@ function colisao() {
     bola.senY = -1;
     bola.veloc += 0.2;
   }
-  
+}
+
+function colisaoParede() {
   //Colisão da raquete com a parede
   if(retangulo.x >= quadradoPrincipal.width - retangulo.largura)
   {
@@ -111,6 +119,11 @@ function colisao() {
   {
     retangulo.x = 0;
   }
+}
+
+function aceleracaoBola() {
+  bola.x += bola.veloc * bola.senX;
+  bola.y += bola.veloc * bola.senY;
 }
 
 function comecarJogo() 
